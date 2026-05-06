@@ -5,7 +5,7 @@ import {
   getAnime,
   deleteAnime,
   updateAnime,
-} from "../controller/animeController.js";
+} from "../controllers/animeController.js";
 
 const router = express.Router();
 

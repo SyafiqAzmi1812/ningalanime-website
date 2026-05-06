@@ -3,13 +3,13 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = await User.create({
-    name: name,
+    username: username,
     email: email,
     password: hashedPassword,
   });
@@ -31,7 +31,7 @@ export const signup = async (req, res) => {
     data: {
       user: {
         id: user.id,
-        name: user.name,
+        username: user.username,
         email: user.email,
       },
       token,
@@ -72,7 +72,7 @@ export const login = async (req, res) => {
     data: {
       user: {
         id: user.id,
-        name: user.name,
+        username: user.username,
         email: user.email,
       },
       token,
