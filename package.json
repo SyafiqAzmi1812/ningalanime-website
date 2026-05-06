@@ -1,0 +1,30 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Selamat datang di **NINGAL ANIME** — sebuah platform website untuk menikmati berbagai anime favorit dengan pengalaman yang simpel, cepat, dan modern.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SyafiqAzmi1812/ningalanime-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/SyafiqAzmi1812/ningalanime-website/issues"
+  },
+  "homepage": "https://github.com/SyafiqAzmi1812/ningalanime-website#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "gitignore": "^0.7.0",
+    "mongoose": "^9.6.1",
+    "nodemon": "^3.1.14",
+    "validator": "^13.15.35"
+  }
+}
