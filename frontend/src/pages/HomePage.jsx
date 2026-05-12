@@ -1,6 +1,21 @@
-import { Link } from "react-router";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router";
+import { getAuth, clearAuth } from "../services/auth";
 
 const HomePage = () => {
+  const [auth, setAuth] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setAuth(getAuth());
+  }, []);
+
+  const handleLogout = () => {
+    clearAuth();
+    setAuth(null);
+    navigate("/");
+  };
+
   return (
     <div className="min-h-screen">
       {/* Navbar */}
@@ -38,7 +53,7 @@ const HomePage = () => {
               </li>
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">
+          <Link to="/" className="btn btn-ghost text-xl">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -54,7 +69,7 @@ const HomePage = () => {
               />
             </svg>
             NingalAnime
-          </a>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -70,17 +85,30 @@ const HomePage = () => {
           </ul>
         </div>
         <div className="navbar-end gap-2">
-          <Link to="/login" className="btn btn-ghost">
-            Login
-          </Link>
-          <Link to="/register" className="btn btn-primary">
-            Get Started
-          </Link>
+          {auth ? (
+            <>
+              <Link to="/dashboard" className="btn btn-ghost">
+                Dashboard
+              </Link>
+              <button onClick={handleLogout} className="btn btn-primary">
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="btn btn-ghost">
+                Login
+              </Link>
+              <Link to="/register" className="btn btn-primary">
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
       {/* Hero Section */}
-      <section className="hero min-h-[85vh] bg-gradient-to-br from-base-200 to-base-300">
+      <section className="hero min-h-[85vh] bg-linear-to-br from-base-200 to-base-300">
         <div className="hero-content flex-col lg:flex-row-reverse gap-12 max-w-6xl">
           <div className="lg:w-1/2 flex justify-center">
             <div className="mockup-browser border border-base-300 bg-base-300 w-full max-w-md">
@@ -92,7 +120,7 @@ const HomePage = () => {
                   {[1, 2, 3, 4, 5, 6].map((i) => (
                     <div
                       key={i}
-                      className="aspect-[3/4] rounded-box bg-gradient-to-br from-primary/40 to-secondary/40 flex items-center justify-center"
+                      className="aspect-3/4 rounded-box bg-linear-to-br from-primary/40 to-secondary/40 flex items-center justify-center"
                     >
                       <span className="text-2xl font-bold text-base-content/30">
                         {i}
@@ -109,7 +137,7 @@ const HomePage = () => {
             </div>
             <h1 className="text-5xl md:text-6xl font-bold leading-tight">
               Stream Your
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary block">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary block">
                 Favorite Anime
               </span>
               Without Limits
@@ -120,9 +148,15 @@ const HomePage = () => {
               fellow fans — all in one place.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link to="/register" className="btn btn-primary btn-lg">
-                Start Watching Free
-              </Link>
+              {auth ? (
+                <Link to="/dashboard" className="btn btn-primary btn-lg">
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <Link to="/register" className="btn btn-primary btn-lg">
+                  Start Watching Free
+                </Link>
+              )}
               <a href="#features" className="btn btn-outline btn-lg">
                 Learn More
               </a>
@@ -346,9 +380,15 @@ const HomePage = () => {
                     </li>
                   ))}
                 </ul>
-                <Link to="/register" className="btn btn-outline w-full">
-                  Get Started
-                </Link>
+                {auth ? (
+                  <Link to="/dashboard" className="btn btn-outline w-full">
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <Link to="/register" className="btn btn-outline w-full">
+                    Get Started
+                  </Link>
+                )}
               </div>
             </div>
 
@@ -393,9 +433,15 @@ const HomePage = () => {
                     </li>
                   ))}
                 </ul>
-                <Link to="/register" className="btn btn-primary w-full">
-                  Subscribe Now
-                </Link>
+                {auth ? (
+                  <Link to="/dashboard" className="btn btn-primary w-full">
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <Link to="/register" className="btn btn-primary w-full">
+                    Subscribe Now
+                  </Link>
+                )}
               </div>
             </div>
 
@@ -436,9 +482,15 @@ const HomePage = () => {
                     </li>
                   ))}
                 </ul>
-                <Link to="/register" className="btn btn-outline w-full">
-                  Subscribe Now
-                </Link>
+                {auth ? (
+                  <Link to="/dashboard" className="btn btn-outline w-full">
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <Link to="/register" className="btn btn-outline w-full">
+                    Subscribe Now
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -498,26 +550,50 @@ const HomePage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-primary to-secondary">
+      <section className="py-20 px-4 bg-linear-to-br from-primary to-secondary">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-primary-content mb-4">
-            Ready to Start Watching?
-          </h2>
-          <p className="text-lg text-primary-content/80 mb-8 max-w-lg mx-auto">
-            Join thousands of anime fans. Start your free trial today — no
-            credit card required.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/register" className="btn btn-accent btn-lg text-base">
-              Start Free Trial
-            </Link>
-            <Link
-              to="/login"
-              className="btn btn-ghost btn-lg text-primary-content border border-primary-content/30"
-            >
-              I Already Have an Account
-            </Link>
-          </div>
+          {auth ? (
+            <>
+              <h2 className="text-4xl font-bold text-primary-content mb-4">
+                Welcome Back!
+              </h2>
+              <p className="text-lg text-primary-content/80 mb-8 max-w-lg mx-auto">
+                Continue watching where you left off. Your anime journey awaits.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link
+                  to="/dashboard"
+                  className="btn btn-accent btn-lg text-base"
+                >
+                  Go to Dashboard
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-4xl font-bold text-primary-content mb-4">
+                Ready to Start Watching?
+              </h2>
+              <p className="text-lg text-primary-content/80 mb-8 max-w-lg mx-auto">
+                Join thousands of anime fans. Start your free trial today — no
+                credit card required.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link
+                  to="/register"
+                  className="btn btn-accent btn-lg text-base"
+                >
+                  Start Free Trial
+                </Link>
+                <Link
+                  to="/login"
+                  className="btn btn-ghost btn-lg text-primary-content border border-primary-content/30"
+                >
+                  I Already Have an Account
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
