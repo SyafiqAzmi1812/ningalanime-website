@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import animeRoutes from "./routes/animeRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import errorHandler, { notFound } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
 
@@ -16,7 +17,9 @@ app.use(express.json());
 app.use("/api/v1/anime", animeRoutes);
 app.use("/api/v1/auth", authRoutes);
 
+app.use(notFound);
+app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log(`Server started on PORT: ${PORT}`);
 });
-
