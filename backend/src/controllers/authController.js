@@ -1,16 +1,18 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import AppError from "../utils/AppError.js";
+import catchAsync from "../utils/catchAsync.js";
 
-export const signup = async (req, res) => {
+export const signup = catchAsync(async (req, res) => {
   const { username, email, password } = req.body;
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = await User.create({
-    username: username,
-    email: email,
+    username,
+    email,
     password: hashedPassword,
   });
 
@@ -37,30 +39,26 @@ export const signup = async (req, res) => {
       token,
     },
   });
-};
+});
 
-export const login = async (req, res) => {
+export const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email: email }).select("+password");
+  const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 404;
-    throw error;
+    throw new AppError("User not found", 404);
   }
 
-  const hashedPassword = await bcrypt.compare(password, user.password);
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-  if (!user.password === hashedPassword) {
-    const error = new Error("Incorrect password");
-    error.statusCode = 400;
-    throw error;
+  if (!isPasswordCorrect) {
+    throw new AppError("Incorrect password", 401);
   }
 
   const token = jwt.sign(
     {
       userId: user.id,
-      email: email,
+      email,
     },
     process.env.JWT_SECRET || "dev_secret",
     { expiresIn: "1h" },
@@ -78,4 +76,4 @@ export const login = async (req, res) => {
       token,
     },
   });
-};
+});
