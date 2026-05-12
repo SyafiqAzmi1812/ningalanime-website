@@ -20,6 +20,7 @@ export const signup = catchAsync(async (req, res) => {
     {
       userId: user.id,
       email: user.email,
+      role: user.role,
     },
     process.env.JWT_SECRET || "dev_secret",
     {
@@ -35,6 +36,7 @@ export const signup = catchAsync(async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
       token,
     },
@@ -59,6 +61,7 @@ export const login = catchAsync(async (req, res) => {
     {
       userId: user.id,
       email,
+      role: user.role,
     },
     process.env.JWT_SECRET || "dev_secret",
     { expiresIn: "1h" },
@@ -72,6 +75,7 @@ export const login = catchAsync(async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
       token,
     },

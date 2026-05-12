@@ -15,11 +15,12 @@ export const getAllUsers = catchAsync(async (req, res) => {
 
 // Create a new user
 export const createUser = catchAsync(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
   const user = await User.create({
     username,
     email,
     password,
+    role,
   });
 
   return res.status(201).json({
@@ -48,12 +49,13 @@ export const getUser = catchAsync(async (req, res) => {
 // Update a user
 export const updateUser = catchAsync(async (req, res) => {
   const id = req.params.id;
-  const { username, email } = req.body;
+  const { username, email, role } = req.body;
   const user = await User.findByIdAndUpdate(
     id,
     {
       username,
       email,
+      role,
     },
     { returnDocument: "after" },
   );
